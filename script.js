@@ -213,7 +213,7 @@ function processTurn(playerTime, isTymon = false) {
     document.getElementById("hitSound").play();
   } else if (playerTime > enemyTime) {
     const diff = playerTime - enemyTime;
-    const damage = Math.round(diff * DAMAGE_MULTIPLIER);
+    const damage = Math.round((diff * DAMAGE_MULTIPLIER)+5);
     playerHP -= damage;
     resultText += `Enemy was faster by <span class="result-value">${diff.toFixed(2)}</span> sec. You lose <span class="result-value">${damage}</span> HP.`;
     showImpactAnimation("player");
