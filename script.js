@@ -33,11 +33,19 @@ function showStartScreen() {
 function updateStatus() {
   let playerPercent = Math.max((playerHP / 50) * 100, 0);
   let enemyPercent = Math.max((enemyHP / 50) * 100, 0);
+  
+  // Add combo display if combo exists
+  let comboDisplay = '';
+  if (comboCount > 1) {
+    comboDisplay = `<div class="combo-counter">x${comboCount}</div>`;
+  }
+  
   const battlefieldHTML = `
     <div id="battlefieldContainer" class="battlefield-container">
       <div class="battlefield">
         <div class="combatant" id="playerCombatant">
           <img src="yza.png" alt="Player" class="combatant-img" id="playerImg">
+          ${comboDisplay}
           <p>
             <span class="name-label">Player:</span> <span id="playerNameDisplay">${playerName}</span> - HP: <span id="playerHPValue" class="hp-value">${playerHP}</span> / 50
           </p>
@@ -98,7 +106,7 @@ function showImpactAnimation(target) {
 }
 
 // Show floating damage numbers above the target.
-function showFloatingDamage(target, damage) {
+function showFloatingDamage(target, damage, isCombo = false) {
   const container = document.getElementById('battlefieldContainer');
   let combatant;
   if (target === "player") {
@@ -109,7 +117,7 @@ function showFloatingDamage(target, damage) {
   const rect = combatant.getBoundingClientRect();
   const containerRect = container.getBoundingClientRect();
   const span = document.createElement('span');
-  span.className = "floating-damage";
+  span.className = isCombo ? "floating-damage combo-damage" : "floating-damage";
   span.innerText = "-" + damage;
   span.style.left = (rect.left + rect.width / 2 - containerRect.left) + "px";
   span.style.top = (rect.top - containerRect.top) + "px";
@@ -117,6 +125,21 @@ function showFloatingDamage(target, damage) {
   setTimeout(() => {
     container.removeChild(span);
   }, 1000);
+}
+
+// Show combo flash animation in the center of the battlefield
+function showComboFlash(comboCount) {
+  const container = document.getElementById('battlefieldContainer');
+  if (!container) return;
+  
+  const comboFlash = document.createElement('div');
+  comboFlash.className = 'combo-flash';
+  comboFlash.innerHTML = `COMBO x${comboCount}!`;
+  container.appendChild(comboFlash);
+  
+  setTimeout(() => {
+    container.removeChild(comboFlash);
+  }, 1500);
 }
 
 // Start a new battle.
@@ -220,12 +243,14 @@ function processTurn(playerTime, isTymon = false) {
     
     if (comboCount > 1) {
       resultText += `Enemy loses <span class="result-value">${baseDamage}</span> HP + <span class="result-value">${comboBonus}</span> combo bonus = <span class="result-value">${totalDamage}</span> total damage! (${comboCount}x combo)`;
+      showComboFlash(comboCount);
+      showFloatingDamage("enemy", totalDamage, true);
     } else {
       resultText += `Enemy loses <span class="result-value">${totalDamage}</span> HP.`;
+      showFloatingDamage("enemy", totalDamage);
     }
     
     showImpactAnimation("enemy");
-    showFloatingDamage("enemy", totalDamage);
     document.getElementById("hitSound").play();
   } else if (playerTime > enemyTime) {
     const diff = playerTime - enemyTime;
