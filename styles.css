@@ -155,7 +155,7 @@ body {
   
   .combo-damage {
     color: #ffcc00 !important;
-    font-size: 1.5em !important;
+    font-size: 3em !important;
     text-shadow: 0 0 5px #ff8800, 0 0 10px #ff8800;
     font-weight: bold;
   }
@@ -191,6 +191,7 @@ body {
     color: #d32f2f;
     animation: floatUp 1s ease-out forwards;
     pointer-events: none;
+    font-size: 2em;
   }
   @keyframes floatUp {
     0% { transform: translateY(0); opacity: 1; }
