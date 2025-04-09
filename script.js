@@ -1,6 +1,7 @@
 let playerHP = 50, enemyHP = 50;
 let tymonCount = 3;
 let playerName = "";
+let comboCount = 0; // Track consecutive wins
 const DAMAGE_MULTIPLIER = 5;
 const gameDiv = document.getElementById('game');
 
@@ -133,6 +134,7 @@ function startBattle() {
   playerHP = 50;
   enemyHP = 50;
   tymonCount = 3;
+  comboCount = 0; // Reset combo counter
   gameTurn();
 }
 
@@ -205,22 +207,41 @@ function processTurn(playerTime, isTymon = false) {
   
   if (playerTime < enemyTime) {
     const diff = enemyTime - playerTime;
-    const damage = Math.round((diff * DAMAGE_MULTIPLIER)+5);
-    enemyHP -= damage;
-    resultText += `You were faster by <span class="result-value">${diff.toFixed(2)}</span> sec. Enemy loses <span class="result-value">${damage}</span> HP.`;
+    const baseDamage = Math.round((diff * DAMAGE_MULTIPLIER) + 5);
+    
+    // Add combo bonus
+    comboCount++;
+    const comboBonus = comboCount;
+    const totalDamage = baseDamage + comboBonus;
+    
+    enemyHP -= totalDamage;
+    
+    resultText += `You were faster by <span class="result-value">${diff.toFixed(2)}</span> sec. `;
+    
+    if (comboCount > 1) {
+      resultText += `Enemy loses <span class="result-value">${baseDamage}</span> HP + <span class="result-value">${comboBonus}</span> combo bonus = <span class="result-value">${totalDamage}</span> total damage! (${comboCount}x combo)`;
+    } else {
+      resultText += `Enemy loses <span class="result-value">${totalDamage}</span> HP.`;
+    }
+    
     showImpactAnimation("enemy");
-    showFloatingDamage("enemy", damage);
+    showFloatingDamage("enemy", totalDamage);
     document.getElementById("hitSound").play();
   } else if (playerTime > enemyTime) {
     const diff = playerTime - enemyTime;
-    const damage = Math.round((diff * DAMAGE_MULTIPLIER)+5);
+    const damage = Math.round((diff * DAMAGE_MULTIPLIER) + 5);
     playerHP -= damage;
     resultText += `Enemy was faster by <span class="result-value">${diff.toFixed(2)}</span> sec. You lose <span class="result-value">${damage}</span> HP.`;
+    
+    // Reset combo when player loses
+    comboCount = 0;
+    
     showImpactAnimation("player");
     showFloatingDamage("player", damage);
     document.getElementById("hitSound").play();
   } else {
     resultText += `It's a tie! No damage dealt.`;
+    // No combo change on tie
   }
   resultText += `</p>`;
   
