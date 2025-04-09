@@ -34,7 +34,7 @@ function updateStatus() {
   let playerPercent = Math.max((playerHP / 50) * 100, 0);
   let enemyPercent = Math.max((enemyHP / 50) * 100, 0);
   
-  // Add combo display if combo exists
+  // Create combo display if combo exists
   let comboDisplay = '';
   if (comboCount > 1) {
     comboDisplay = `<div class="combo-counter">x${comboCount}</div>`;
@@ -45,7 +45,6 @@ function updateStatus() {
       <div class="battlefield">
         <div class="combatant" id="playerCombatant">
           <img src="yza.png" alt="Player" class="combatant-img" id="playerImg">
-          ${comboDisplay}
           <p>
             <span class="name-label">Player:</span> <span id="playerNameDisplay">${playerName}</span> - HP: <span id="playerHPValue" class="hp-value">${playerHP}</span> / 50
           </p>
@@ -53,7 +52,7 @@ function updateStatus() {
             <div class="bar player-bar" style="width: ${playerPercent}%"></div>
           </div>
         </div>
-        <div class="vs">VS</div>
+        <div class="vs">VS ${comboDisplay}</div>
         <div class="combatant" id="enemyCombatant">
           <img src="flc.png" alt="Enemy" class="combatant-img" id="enemyImg">
           <p>
@@ -132,9 +131,20 @@ function showComboFlash(comboCount) {
   const container = document.getElementById('battlefieldContainer');
   if (!container) return;
   
+  const vsElement = document.querySelector('.vs');
+  if (!vsElement) return;
+  
+  const vsRect = vsElement.getBoundingClientRect();
+  const containerRect = container.getBoundingClientRect();
+  
   const comboFlash = document.createElement('div');
   comboFlash.className = 'combo-flash';
   comboFlash.innerHTML = `COMBO x${comboCount}!`;
+  
+  // Position the combo flash above the VS element
+  comboFlash.style.left = ((vsRect.left + vsRect.width/2) - containerRect.left) + 'px';
+  comboFlash.style.top = (vsRect.top - containerRect.top - 40) + 'px';
+  
   container.appendChild(comboFlash);
   
   setTimeout(() => {

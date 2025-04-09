@@ -26,12 +26,13 @@
       <h2>Game Rules</h2>
       <ul>
         <li>Both you and the enemy start with 50 HP.</li>
-        <li>Each turn, you both “solve” the Rubik’s Cube simultaneously.</li>
-        <li>You enter your solving time (in seconds), and the enemy’s time is simulated (from a normal distribution with mean = 11.62 and std = 1.10).</li>
+        <li>Each turn, you both "solve" the Rubik's Cube simultaneously.</li>
+        <li>You enter your solving time (in seconds), and the enemy's time is simulated (from a normal distribution with mean = 11.62 and std = 1.10).</li>
         <li>The slower solver loses HP equal to round(|difference| × 5 + 5).</li>
         <li>If the times are equal, no damage is dealt.</li>
         <li>You can use your helper <em>Tymon</em> (3 times per game) to substitute your time with a value between 4 and 6 sec.</li>
-        <li>The battle continues until one side’s HP reaches 0.</li>
+        <li>Each consecutive win builds a combo, adding +1 damage for each combo level (resets when you lose).</li>
+        <li>The battle continues until one side's HP reaches 0.</li>
       </ul>
     </div>
   </div>

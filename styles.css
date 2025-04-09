@@ -92,6 +92,10 @@ body {
     color: #333;
     align-self: center;
     margin: 0 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
   /* Name label styling */
@@ -130,24 +134,23 @@ body {
   }
   
   /* Combo counter and effects */
-  .combo-counter {
+  .vs .combo-counter {
     position: absolute;
-    top: -15px;
-    right: -15px;
+    top: -25px;
+    left: 50%;
+    width: auto;
+    padding: 10px;
+    transform: translate(-50%, -50%) !important;
     background: linear-gradient(135deg, #ffd700, #ff6b00);
     color: white;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     font-weight: bold;
     font-size: 18px;
     box-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
     animation: pulse 0.7s infinite alternate;
     z-index: 10;
+    text-align: center;
   }
   
   .combo-damage {
@@ -159,9 +162,7 @@ body {
   
   .combo-flash {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateX(-50%);
     color: #ffd700;
     font-size: 36px;
     font-weight: bold;
@@ -177,10 +178,10 @@ body {
   }
   
   @keyframes comboFlash {
-    0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
-    25% { transform: translate(-50%, -50%) scale(1.5); opacity: 1; }
-    75% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
-    100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
+    0% { transform: translateX(-50%) scale(0.5); opacity: 0; }
+    25% { transform: translateX(-50%) scale(1.5); opacity: 1; }
+    75% { transform: translateX(-50%) scale(1.2); opacity: 0.8; }
+    100% { transform: translateX(-50%) scale(2); opacity: 0; }
   }
   
   /* Floating damage text */
